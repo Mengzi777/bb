@@ -1,0 +1,16 @@
+16:15:47 **** Incremental Build of configuration Debug for project TestPrintDemo_Cplus ****
+make all 
+Building target: TestPrintDemo_Cplus
+Invoking: MacOS X C++ Linker
+g++ -L/usr/local/lib -L/Users/Yoghurt/lib -o "TestPrintDemo_Cplus"  ./src/Printer_test.o   -lcunit -lPrinterTest
+Finished building target: TestPrintDemo_Cplus
+ 
+16:16:04 **** Incremental Build of configuration Debug for project TestPrintDemo_Cplus ****
+make all 
+make: Nothing to be done for `all'.
+16:28:51 **** Incremental Build of configuration Debug for project TestPrintDemo_Cplus ****
+make all 
+make: Nothing to be done for `all'.
+16:28:52 **** Incremental Build of configuration Debug for project TestPrintDemo_Cplus ****
+make all 
+make: Nothing to be done for `all'.

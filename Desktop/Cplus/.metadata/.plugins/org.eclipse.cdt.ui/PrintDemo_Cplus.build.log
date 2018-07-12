@@ -1,0 +1,10 @@
+16:10:52 **** Incremental Build of configuration Debug for project PrintDemo_Cplus ****
+make all 
+Building target: libPrinterTest.dylib
+Invoking: MacOS X C++ Linker
+g++ -L/usr/local/lib -dynamiclib -o "libPrinterTest.dylib"  ./src/DuplexPrinter.o ./src/Printer.o   -lcunit
+Finished building target: libPrinterTest.dylib
+ 
+
+16:10:52 Build Finished (took 387ms)
+

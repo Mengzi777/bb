@@ -1,0 +1,227 @@
+/*
+ * Printer_test.cpp
+ *
+ *  @since Jan 20, 2018
+ *  @author philip gust
+ */
+
+#include "CUnit/CUnit.h"
+#include "CUnit/Basic.h"
+
+#include <cstdio>
+#include "Printer.h"
+#include "DuplexPrinter.h"
+
+using namespace CS_5004;
+
+/**
+ * Test Printer.
+ */
+void testPrinter() {
+	fprintf(stderr, "\n");
+	Printer printer;
+
+	// report the model;
+	const string& printerModel = printer.model();
+	CU_ASSERT_STRING_EQUAL(printerModel.c_str(), "Printer");
+
+	// report offline status
+	bool offline = printer.offline();
+	CU_ASSERT_TRUE(offline);
+
+	// report ready status
+	bool ready = printer.ready();
+	CU_ASSERT_FALSE(ready);
+
+	// report sheets available (no paper)
+	unsigned int nSheets = printer.sheetsAvailable();
+	CU_ASSERT_EQUAL(nSheets, 0)
+
+	// print when printer is offline and not ready
+	unsigned int nPages = printer.print(3);
+	CU_ASSERT_EQUAL(nPages, 0);
+
+	// put printer online
+	printer.offline(false);
+
+	// print when printer is online but not ready
+	nPages = printer.print(3);
+	CU_ASSERT_EQUAL(nPages, 0);
+
+	// add sheets to printer
+	unsigned int capacity = printer.sheetCapacity();
+	CU_ASSERT_EQUAL(500, capacity);
+	unsigned int added = printer.addSheets(capacity);
+	CU_ASSERT_EQUAL(added, capacity);
+	added = printer.addSheets(10);
+	CU_ASSERT_EQUAL(added, 0);
+	ready = printer.ready();
+	CU_ASSERT_TRUE(ready);
+
+	// print when printer is online and ready
+	nPages = printer.print(3);
+	CU_ASSERT_EQUAL(nPages, 3);
+	nSheets = printer.sheetsAvailable();
+	CU_ASSERT_EQUAL(nSheets, capacity-nPages);
+
+	// print more than available page capacity
+	nPages = printer.print(capacity);
+	CU_ASSERT_EQUAL(nPages, nSheets);
+	nSheets = printer.sheetsAvailable();
+	CU_ASSERT_EQUAL(nSheets, 0);
+
+	// out of paper: not ready
+	ready = printer.ready();
+	CU_ASSERT_FALSE(ready);
+}
+
+/**
+ * Test the DuplexPrinter subclass of Printer
+ */
+void testDuplexPrinter() {
+	fprintf(stderr, "\n");
+	DuplexPrinter printer;
+
+	// report the model;
+	const string& printerModel = printer.model();
+	CU_ASSERT_STRING_EQUAL(printerModel.c_str(), "DuplexPrinter");
+
+	// report duplex mode
+	bool duplex = printer.duplex();
+	CU_ASSERT_FALSE(duplex);
+
+	// report offline status
+	bool offline = printer.offline();
+	CU_ASSERT_TRUE(offline);
+
+	// report ready status
+	bool ready = printer.ready();
+	CU_ASSERT_FALSE(ready);
+
+	// report sheets available (no paper)
+	unsigned int nSheets = printer.sheetsAvailable();
+	CU_ASSERT_EQUAL(nSheets, 0)
+
+	// print when printer is offline and not ready
+	unsigned int nPages = printer.print(3);
+	CU_ASSERT_EQUAL(nPages, 0);
+
+	// put printer online
+	printer.offline(false);
+
+	// print when printer is online but not ready
+	nPages = printer.print(3);
+	CU_ASSERT_EQUAL(nPages, 0);
+
+	// add sheets to printer
+	unsigned int capacity = printer.sheetCapacity();
+	CU_ASSERT_EQUAL(500, capacity);
+	unsigned int added = printer.addSheets(capacity);
+	CU_ASSERT_EQUAL(added, capacity);
+	added = printer.addSheets(10);
+	CU_ASSERT_EQUAL(added, 0);
+	ready = printer.ready();
+	CU_ASSERT_TRUE(ready);
+
+
+	// print non-duplex when printer is online and ready
+	nPages = printer.print(3);
+	CU_ASSERT_EQUAL(nPages, 3);
+	nSheets = printer.sheetsAvailable();
+	CU_ASSERT_EQUAL(nSheets, capacity-nPages);
+
+	// set printer to duplex mode
+	printer.duplex(true);
+	duplex = printer.duplex();
+	CU_ASSERT_TRUE(duplex);
+
+	// print more than available page capacity
+	nPages = printer.print(capacity*2);  // prints on both sides
+	CU_ASSERT_EQUAL(nPages, nSheets*2);  // prints on both sides
+	nSheets = printer.sheetsAvailable();
+	CU_ASSERT_EQUAL(nSheets, 0);
+
+	// out of paper: not ready
+	ready = printer.ready();
+	CU_ASSERT_FALSE(ready);
+}
+
+
+/**
+ * Test Printer reference to a DuplexPrinter.
+ */
+void testDuplexPrinterRef() {
+	fprintf(stderr, "\n");
+	DuplexPrinter duplexPrinter;
+	Printer &printer = duplexPrinter;  // alias as regular printer
+
+	// get duplex printer name through duplexPrinter ref
+	const string &duplexPrinterModel = duplexPrinter.model();   // model as duplex printer
+	CU_ASSERT_STRING_EQUAL(duplexPrinterModel.c_str(), "DuplexPrinter");
+
+	// get duplex printer name through printer ref
+	const string &printerModel = printer.model();  // model as regular printer
+	CU_ASSERT_STRING_EQUAL(printerModel.c_str(), "DuplexPrinter");  // would be "Printer" w/o virtual
+}
+
+/**
+ * Test Printer pointer to a DuplexPrinter.
+ */
+void testDuplexPrinterPtr() {
+	fprintf(stderr, "\n");
+	DuplexPrinter *duplexPrinter = new DuplexPrinter();
+	Printer *printer = duplexPrinter;
+
+	// get duplex printer name through duplexPrinter ptr
+	const string &duplexPrinterModel = duplexPrinter->model();
+	CU_ASSERT_STRING_EQUAL(duplexPrinterModel.c_str(), "DuplexPrinter");
+
+
+	// get duplex printer name through printer ptr
+	const string &printerModel = printer->model();
+	CU_ASSERT_STRING_EQUAL(printerModel.c_str(), "DuplexPrinter"); // would be "Printer" w/o virtual
+
+	delete printer;   // would not call ~DuplexPrinter() w/o virtual
+}
+
+/**
+ * Test all the functions for this application.
+ *
+ * @return test error code
+ */
+static CU_ErrorCode test_all() {
+	// initialize the CUnit test registry -- only once per application
+	CU_initialize_registry();
+
+	// add a suite to the registry with no init or cleanup
+	CU_pSuite pSuite = CU_add_suite("printer_tests", NULL, NULL);
+
+	// add the tests to the suite
+	CU_add_test(pSuite, "testPrinter", testPrinter);
+	CU_add_test(pSuite, "testDuplexPrinter", testDuplexPrinter);
+	CU_add_test(pSuite, "testDuplexPrinterRef", testDuplexPrinterRef);
+	CU_add_test(pSuite, "testDuplexPrinterPtr", testDuplexPrinterPtr);
+
+	// run all test suites using the basic interface
+	CU_basic_set_mode(CU_BRM_VERBOSE);
+	CU_basic_run_tests();
+
+	// display information on failures that occurred
+	CU_basic_show_failures(CU_get_failure_list());
+
+	// Clean up registry and return status
+	CU_cleanup_registry();
+	return CU_get_error();
+}
+
+/**
+ * Main program to invoke test functions
+ *
+ * @return the exit status of the program
+ */
+int main(void) {
+	// test all the functions
+	CU_ErrorCode code = test_all();
+
+	return (code == CUE_SUCCESS) ? EXIT_SUCCESS : EXIT_FAILURE;
+}

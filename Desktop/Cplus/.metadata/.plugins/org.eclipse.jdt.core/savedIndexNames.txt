@@ -1,0 +1,4 @@
+INDEX VERSION 1.130+/Users/Yoghurt/Desktop/Cplus/.metadata/.plugins/org.eclipse.jdt.core
+4066349159.index
+1755925017.index
+4006925760.index

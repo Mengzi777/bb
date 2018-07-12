@@ -1,0 +1,10 @@
+LaunchTargetManager/configs/PrintDemo_Cplus=org.eclipse.launchbar.core.launchTargetType.local\:Local
+LaunchTargetManager/configs/PrinterTest=org.eclipse.launchbar.core.launchTargetType.local\:Local
+LaunchTargetManager/configs/TestPrintDemo_Cplus=org.eclipse.launchbar.core.launchTargetType.local\:Local
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/name=Local
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=macosx
+configDescList=org.eclipse.launchbar.core.descriptorType.default\:PrintDemo_Cplus,org.eclipse.launchbar.core.descriptorType.default\:TestPrintDemo_Cplus,org.eclipse.launchbar.core.descriptorType.default\:PrinterTest (2),org.eclipse.launchbar.core.descriptorType.default\:PrinterTest (3),org.eclipse.launchbar.core.descriptorType.default\:PrinterTest,org.eclipse.launchbar.core.descriptorType.default\:PrinterTest (1)
+eclipse.preferences.version=1
+org.eclipse.launchbar.core.descriptorType.default\:PrintDemo_Cplus/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:PrintDemo_Cplus/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
